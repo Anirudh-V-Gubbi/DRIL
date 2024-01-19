@@ -8,39 +8,6 @@
 #include <fstream>
 #include "macros.h"
 
-
-
-// #############################################################################
-//                           CopyFile
-// #############################################################################
-
-bool copyFile(const char* sourcePath, const char* destinationPath) {
-    // Open source file for reading in binary mode
-    std::ifstream sourceFile(sourcePath, std::ios::binary);
-    if (!sourceFile) {
-        std::cerr << "Error opening source file: " << sourcePath << std::endl;
-        return false;
-    }
-
-    // Open destination file for writing in binary mode
-    std::ofstream destinationFile(destinationPath, std::ios::binary);
-    if (!destinationFile) {
-        std::cerr << "Error opening destination file: " << destinationPath << std::endl;
-        return false;
-    }
-
-    // Copy content from source to destination
-    destinationFile << sourceFile.rdbuf();
-
-    if (destinationFile.fail()) {
-        std::cerr << "Error copying file." << std::endl;
-        return false;
-    }
-    sourceFile.close();
-    destinationFile.close();
-
-    return true;
-}
 // #############################################################################
 //                           DRILModule
 // #############################################################################
@@ -49,7 +16,7 @@ template <typename E, size_t NumSymbols>
 class DRILModule
 {
 public:
-  static void Loadlibrary() { GetInstance().Load(1); }
+  static void Loadlibrary() { GetInstance().Load(0); }
   static void Reloadlibrary() { GetInstance().Reload(); }
 protected:
   static E& GetInstance()
@@ -93,23 +60,49 @@ protected:
     }
     else
     {
-      // We didn't find the variable. Return an empty pointer
-      return nullptr;
+      // We didn't find the variable. Throws an error
+      throw std::runtime_error(std::string("Variable not found")+name);
     }
   }
 
 private:
-    
-  void Load(bool ch)
+  bool copyFile(const char* sourcePath, const char* destinationPath) { 
+    // Open source file for reading in binary mode
+    std::ifstream sourceFile(sourcePath, std::ios::binary);
+    if (!sourceFile) {
+        std::cerr << "Error opening source file: " << sourcePath << std::endl;
+        return false;
+    }
+
+    // Open destination file for writing in binary mode
+    std::ofstream destinationFile(destinationPath, std::ios::binary);
+    if (!destinationFile) {
+        std::cerr << "Error opening destination file: " << destinationPath << std::endl;
+        return false;
+    }
+
+    // Copy content from source to destination
+    destinationFile << sourceFile.rdbuf();
+
+    if (destinationFile.fail()) {
+        std::cerr << "Error copying file." << std::endl;
+        return false;
+    }
+    sourceFile.close();
+    destinationFile.close();
+
+    return true;
+  }
+  void Load(bool isWindowsReload)
   {
-    if(ch==1){
+    if(isWindowsReload==0){
     m_libHandle = dril_load(GetPath()); //Important LoadLibraryA
     }
     else{
       std::string path=GetPath();
-      size_t pos = path.find('.');
+      size_t pos = path.rfind('.'); //To find the last . 
       if (pos != std::string::npos) {
-          path.insert(pos, "_copy");
+          path.insert(pos, "_Copy");
       }
       const char* CopyPath=path.c_str();
       m_libHandle = dril_load(CopyPath);
@@ -124,12 +117,14 @@ private:
     dril_close(handle);
     m_symbols.clear();
     std::string path=GetPath();
-    size_t pos = path.find('.');
+    size_t pos = path.rfind('.');
     if (pos != std::string::npos) {
         path.insert(pos, "_Copy");
     }
     const char* CopyPath=path.c_str();
-    drilcp;
+    if (_WIN32){
+      copyFile(GetPath(),CopyPath);
+    }
     dril_reload();
 
   }
