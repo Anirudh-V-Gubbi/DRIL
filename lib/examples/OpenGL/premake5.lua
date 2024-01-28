@@ -5,6 +5,7 @@ workspace "OpenGL"
   location "build"
   outputdir= "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
   include "dep/GLFW"
+  links {"OpenGLlib"}
 
   filter "configurations:Debug"
     defines { "DEBUG" }
@@ -30,12 +31,7 @@ workspace "OpenGL"
       "dep/GLFW",
       "dep/glad",
       "dep/glm",
-      "dep/stb_image",
-      "dep/include"
-    }
-    links
-    {
-      "GLFW"
+      "dep/stb_image"
     }
     
 
@@ -43,11 +39,9 @@ workspace "OpenGL"
     kind "ConsoleApp"
     location "build"
     files { "main.cpp"}
-    links { 
-      "OpenGLlib",
-      "GLFW",
-      "opengl32",
-      "shell32", 
-      "gdi32" 
-    }
     includedirs { "dep/include/"}
+    links { 
+      "OpenGLlib","GLFW","opengl32",
+      "shell32", 
+      "gdi32"
+    }
