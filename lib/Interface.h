@@ -9,10 +9,10 @@
 #include <unordered_map>
 
 // #############################################################################
-//                           DRILModule
+//                           DRIL
 // #############################################################################
 
-template <typename E, size_t NumSymbols> class DRILModule {
+template <typename E, size_t NumSymbols> class DRIL {
 public:
   static void Loadlibrary() { GetInstance().Load(0); }
   static void Reloadlibrary() { GetInstance().Reload(); }
