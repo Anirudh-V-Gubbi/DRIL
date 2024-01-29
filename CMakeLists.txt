@@ -142,10 +142,10 @@ elseif(NOT(${CMAKE_SYSTEM_NAME} MATCHES "Haiku") AND NOT WIN32)
 	target_link_libraries(efsw PRIVATE Threads::Threads)
 endif()
 
-target_sources(efsw PRIVATE ${EFSW_CPP_SOURCE})
+target_sources(efsw PRIVATE ${EFSW_CPP_SOURCE} "src/wrapper/fileWatcher.h" "src/wrapper/fileWatcher.cpp")
 
 if(BUILD_STATIC_LIBS)
-	target_sources(efsw-static PRIVATE ${EFSW_CPP_SOURCE})
+	target_sources(efsw-static PRIVATE ${EFSW_CPP_SOURCE} "src/wrapper/fileWatcher.h" "src/wrapper/fileWatcher.cpp")
 endif()
 
 include(CMakePackageConfigHelpers)
@@ -199,10 +199,10 @@ endif()
 
 if(BUILD_TEST_APP)
 	# C++ test application
-	add_executable(efsw-test src/test/efsw-test.cpp)
+	add_executable(efsw-test src/test/efsw-test.cpp "src/wrapper/fileWatcher.h" "src/wrapper/fileWatcher.cpp")
 	target_link_libraries(efsw-test efsw-static)
 
 	# C test application
-	add_executable(efsw-test-stdc src/test/efsw-test.c)
+	add_executable(efsw-test-stdc src/test/efsw-test.c "src/wrapper/fileWatcher.h" "src/wrapper/fileWatcher.cpp")
 	target_link_libraries(efsw-test-stdc efsw-static)
 endif()

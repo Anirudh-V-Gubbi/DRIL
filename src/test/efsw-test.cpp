@@ -3,10 +3,9 @@
 #include <efsw/efsw.hpp>
 #include <iostream>
 #include <signal.h>
-
 bool STOP = false;
 
-void sigend( int ) {
+static void sigend( int ) {
 	std::cout << std::endl << "Bye bye" << std::endl;
 	STOP = true;
 }
@@ -68,7 +67,7 @@ int main( int argc, char** argv ) {
 
 	std::cout << "Press ^C to exit demo" << std::endl;
 
-	bool commonTest = true;
+	bool commonTest = true;      
 	bool useGeneric = false;
 	std::string path;
 
@@ -99,25 +98,25 @@ int main( int argc, char** argv ) {
 
 		std::cout << "CurPath: " << CurPath.c_str() << std::endl;
 
-			 /// starts watching
+	/// starts watching
 		fileWatcher.watch();
 
-		/// add a watch to the system
+	/// add a watch to the system
 		handleWatchID( fileWatcher.addWatch( CurPath + "test", ul, true ) );
 
-		/// adds another watch after started watching...
+	/// adds another watch after started watching...
 		efsw::System::sleep( 100 );
-
 		efsw::WatchID watchID =
 			handleWatchID( fileWatcher.addWatch( CurPath + "test2", ul, true ) );
 
-		/// delete the watch
-		if ( watchID > 0 ) {
+	/// delete the watch
+		if ( watchID < 0 ) {
 			efsw::System::sleep( 1000 );
 			fileWatcher.removeWatch( watchID );
 		}
 	} else {
-		if ( fileWatcher.addWatch( path, ul, true ) > 0 ) {
+		if ( 
+			fileWatcher.addWatch( path, ul, true ) > 0 ) {
 			fileWatcher.watch();
 
 			std::cout << "Watching directory: " << path.c_str() << std::endl;

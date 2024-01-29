@@ -1,6 +1,5 @@
 #ifndef EFSW_DIRECTORYSNAPSHOTDIFF_HPP
 #define EFSW_DIRECTORYSNAPSHOTDIFF_HPP
-
 #include <efsw/FileInfo.hpp>
 
 namespace efsw {

@@ -27,7 +27,6 @@
 
 #ifndef ESFW_HPP
 #define ESFW_HPP
-
 #include <vector>
 #include <string>
 #include <vector>
@@ -74,6 +73,7 @@ class WatcherOption;
 /// Actions to listen for. Rename will send two events, one for
 /// the deletion of the old file, and one for the creation of the
 /// new file.
+
 namespace Actions {
 enum Action {
 	/// Sent when a file is created or renamed

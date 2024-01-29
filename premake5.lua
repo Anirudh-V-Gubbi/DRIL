@@ -154,7 +154,7 @@ workspace "efsw"
 		language "C++"
 		targetdir("./lib")
 		includedirs { "include", "src" }
-		files { "src/efsw/*.cpp", osfiles }
+		files { "src/efsw/*.cpp", osfiles , "src/wrapper/*.cpp" }
 		conf_excludes()
 
 		filter "configurations:debug"
@@ -180,7 +180,7 @@ workspace "efsw"
 		kind "ConsoleApp"
 		language "C++"
 		links { "efsw-static-lib" }
-		files { "src/test/*.cpp" }
+		files { "src/test/custom-test/*.cpp" }
 		includedirs { "include", "src" }
 		conf_links()
 
