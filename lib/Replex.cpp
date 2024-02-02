@@ -61,6 +61,27 @@ public:
         throw std::runtime_error(std::string("Entity not found: ") + name);
         }
     }
+    template <typename Ret> 
+    Ret GetEntity(std::string name)
+    {
+        
+        auto symbol = symbol_map.find(name);
+        if (symbol != symbol_map.end())
+        {
+
+            if(symbol->second.type==EntityType::FUNC)
+            {
+                return *reinterpret_cast<Ret(*)>(symbol->second.memory_adress);     }
+            else
+            {
+                return *static_cast<Ret*>(symbol->second.memory_adress);
+            }
+        }
+        else
+        {
+        throw std::runtime_error(std::string("Entity not found: ") + name);
+        }
+    }
     
 private:  
    
@@ -173,8 +194,11 @@ int main()
 {
     RePlexModule r;
     r.LoadLibrary("/home/adv/DRILtesting/libtest.so");
-    std::cout<<r.GetEntity<int>("foo",7);
-    std::cout<<r.GetEntity<int>("foo",0);
+    std::cout<<r.GetEntity<int>("bar")<<'\n';
+    std::cout << "Make some changes, recompile, and press enter." << std::flush;
+    while(std::cin.get() != '\n') {}
+    r.ReloadLibrary();
+    std::cout<<r.GetEntity<int>("bar");
     
 }
 
