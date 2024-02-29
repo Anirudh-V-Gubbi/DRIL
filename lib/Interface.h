@@ -85,7 +85,7 @@ private:
   }
   void Load(bool isWindowsReload)
   {
-    if(!isWindowsReload){
+    if(isWindowsReload==0){
     m_libHandle = dril_load(GetPath()); //Important LoadLibraryA
     }
     else{
