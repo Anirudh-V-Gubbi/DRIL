@@ -1,4 +1,6 @@
 #pragma once
+
+#include "Parser.h"
 #include "macros.h"
 #include <array>
 #include <fstream>
@@ -12,24 +14,12 @@
 //                           DRIL
 // #############################################################################
 
-template <typename E, size_t NumSymbols> class DRIL {
+class DRIL {
 public:
-  static void Loadlibrary() { GetInstance().Load(0); }
-  static void Reloadlibrary() { GetInstance().Reload(); }
+  DRIL(std::string path) : m_path(path), parser(path) {}
 
-protected:
-  static E &GetInstance() {
-    static E instance;
-    return instance;
-  }
-
-  // Should return the path to the library on disk
-  virtual const char *GetPath() const = 0;
-
-  // Should return a reference to an array of C-strings of size NumSymbols
-  // Used when loading or reloading the library to lookup the address of
-  // all exported symbols
-  virtual std::array<const char *, NumSymbols> &GetSymbolNames() const = 0;
+  void LoadLibrary() { Load(0); }
+  void ReloadLibrary() { Reload(); }
 
   template <typename Ret, typename... Args>
   Ret Execute(const char *name, Args... args) {
@@ -38,7 +28,7 @@ protected:
     if (symbol != m_symbols.end()) {
       // Cast the address to the appropriate function type and call it,
       // forwarding all arguments
-      return reinterpret_cast<Ret (*)(Args...)>(symbol->second)(args...);
+      return reinterpret_cast<Ret (*)(Args...)>(symbol->second.memory_adress)(args...);
     } else {
       throw std::runtime_error(std::string("Function not found: ") + name);
     }
@@ -47,14 +37,26 @@ protected:
   template <typename T> T *GetVar(const char *name) {
     auto symbol = m_symbols.find(name);
     if (symbol != m_symbols.end()) {
-      return reinterpret_cast<T *>(symbol->second);
+      return reinterpret_cast<T *>(symbol->second.memory_adress);
     } else {
       // We didn't find the variable. Throws an error
       throw std::runtime_error(std::string("Variable not found") + name);
     }
   }
 
+protected:
+  //   // Should return a reference to an array of C-strings of size NumSymbols
+  //   // Used when loading or reloading the library to lookup the address of
+  //   // all exported symbols
+  //   virtual std::array<const char *, NumSymbols> &GetSymbolNames() const = 0;
+  // }
+
 private:
+  std::string m_path;
+  Parser parser;
+  void *m_libHandle;
+  std::unordered_map<std::string, SymbolInfo> m_symbols;
+
   bool copyFile(const char *sourcePath, const char *destinationPath) {
     // Open source file for reading in binary mode
     std::ifstream sourceFile(sourcePath, std::ios::binary);
@@ -83,11 +85,12 @@ private:
 
     return true;
   }
+
   void Load(bool isWindowsReload) {
     if (isWindowsReload == 0) {
-      m_libHandle = dril_load(GetPath());
+      m_libHandle = dril_load(m_path.c_str());
     } else {
-      std::string path = GetPath();
+      std::string path = m_path;
       size_t pos = path.rfind('.'); // To find the last .
       if (pos != std::string::npos) {
         path.insert(pos, "_Copy");
@@ -104,26 +107,26 @@ private:
     m_symbols.clear();
 
 #ifdef _WIN32
-    std::string path = GetPath();
+    std::string path = m_path;
     size_t pos = path.rfind('.');
     if (pos != std::string::npos) {
       path.insert(pos, "_Copy");
     }
     const char *CopyPath = path.c_str();
 
-    copyFile(GetPath(), CopyPath);
+    copyFile(path.c_str(), CopyPath);
 #endif
 
     dril_reload();
   }
 
   void LoadSymbols() {
-    for (const char *symbol : GetSymbolNames()) {
-      OS_HANDLE handle = static_cast<OS_HANDLE>(m_libHandle);
+    m_symbols = parser.ExtPrsSymbolTable();
 
-      m_symbols[symbol] = lib_find(handle, symbol);
+    OS_HANDLE handle = static_cast<OS_HANDLE>(m_libHandle);
+    for (auto &symbol : m_symbols) {
+      m_symbols[symbol.first].memory_adress =
+          lib_find(handle, symbol.first.c_str());
     }
   }
-  void *m_libHandle;
-  std::unordered_map<std::string, fptr> m_symbols;
 };
