@@ -1,6 +1,7 @@
 project "GLFW"
-	kind "StaticLib"
+	kind "SharedLib"
 	language "C"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -63,6 +64,36 @@ project "GLFW"
 		{ 
 			"_GLFW_WIN32",
 			"_CRT_SECURE_NO_WARNINGS"
+		}
+		filter "system:macosx"
+		systemversion "14.0.0"
+		staticruntime "On"
+		pic "On"
+
+		files
+		{
+			"src/cocoa_time.c",
+            "src/posix_thread.c",
+            "src/cocoa_init.m",
+            "src/cocoa_joystick.m",
+            "src/cocoa_monitor.m",
+            "src/cocoa_window.m",
+            "src/nsgl_context.m",
+			"src/egl_context.c",
+			"src/osmesa_context.c"
+		}
+
+		defines 
+		{ 
+			"_GLFW_COCOA"
+		}
+
+		links
+		{
+			"OpenGL.framework",
+			"Cocoa.framework",
+			"IOKit.framework",
+			"CoreVideo.framework"
 		}
 
 	filter "configurations:Debug"

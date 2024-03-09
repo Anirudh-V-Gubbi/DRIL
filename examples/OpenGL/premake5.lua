@@ -5,6 +5,7 @@ workspace "OpenGL"
   location "build"
   outputdir= "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
   include "dep/GLFW"
+  include "dep/Glad"
   links {"OpenGLlib"}
 
   filter "configurations:Debug"
@@ -20,7 +21,6 @@ workspace "OpenGL"
     location "build"
     files
     {
-      "glad.c",
       "dep/stb_image/stb_image.cpp",
       "dep/stb_image/stb_image.h",
       "dep/glm/**.h",
@@ -39,9 +39,17 @@ workspace "OpenGL"
     kind "ConsoleApp"
     location "build"
     files { "main.cpp"}
-    includedirs { "dep/include/"}
-    links { 
-      "OpenGLlib","GLFW","opengl32",
-      "shell32", 
-      "gdi32"
-    }
+    includedirs { "dep/Glad/include/"}
+
+    filter "system:windows"
+      links { 
+        "OpenGLlib","GLFW","opengl32",
+        "shell32", 
+        "gdi32"
+      }
+    
+    filter "system:macosx"
+      links { 
+        "GLFW",
+        "Glad"
+      }

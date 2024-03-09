@@ -1,5 +1,5 @@
 project "Glad"
-    kind "StaticLib"
+    kind "SharedLib"
     language "C"
     staticruntime "on"
     
@@ -15,7 +15,8 @@ project "Glad"
 
     includedirs
     {
-        "include"
+        "include",
+        "include/KHR"
     }
     
     filter "system:windows"
