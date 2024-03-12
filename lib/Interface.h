@@ -104,18 +104,18 @@ private:
   {
     if (isWindowsReload == 0)
     {
-      m_libHandle = dril_load(GetPath());
+      m_libHandle = dril_load(m_path.c_str());
     }
     else
     {
-      std::string path = GetPath();
+      std::string path =m_path ;
       size_t pos = path.rfind('.');
       if (pos != std::string::npos)
       {
         path.insert(pos, "_Copy");
       }
       const char *CopyPath = path.c_str();
-      copyFile(GetPath(), CopyPath);
+      copyFile(m_path.c_str(), CopyPath);
       m_libHandle = dril_load(CopyPath);
     }
     LoadSymbols();
