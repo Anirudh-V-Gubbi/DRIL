@@ -19,7 +19,7 @@ class DRIL
 public:
   DRIL(std::string path) : m_path(path), parser(path) {}
 
-  void LoadLibrary() { Load(0); }
+  void LoadLibrary() {dril_reload();}
   void ReloadLibrary() { Reload(); }
 
   template <typename Ret, typename... Args>
