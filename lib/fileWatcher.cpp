@@ -41,4 +41,3 @@ void CustomFileWatcher::removeWatchbyId( std::string path ) {
 
 
 // Ouputs the addition or error state of a watch
-
