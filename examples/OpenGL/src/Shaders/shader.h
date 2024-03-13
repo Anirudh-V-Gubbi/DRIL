@@ -7,8 +7,10 @@
 #include <fstream>
 
 #include <glad/glad.h>
-#include <glm/mat4x4.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "..\dep\glm\glm\mat4x4.hpp"
+#include "..\dep\glm\glm\gtc/type_ptr.hpp"
+//#include <glm/mat4x4.hpp>
+//#include <glm/gtc/type_ptr.hpp>
 #include "../Logger/logger.h"
 
 class Shader {

@@ -9,6 +9,6 @@
 #include <iostream>
 
 extern "C" {
-    void OnEvent(Event* event, GLFWwindow* window, Renderer* renderer);
+    __declspec(dllexport) void OnEvent(Event* event, GLFWwindow* window, Renderer* renderer);
 }
 #endif

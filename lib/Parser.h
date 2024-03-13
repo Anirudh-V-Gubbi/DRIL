@@ -30,9 +30,11 @@ public:
   Parser(std::string path)
   {
 #ifdef _WIN32
-    command="vsdev.bat";
+    command=R"(C:\Users\DRIL\lib\vsdev.bat)";
     std::string filename2=path+"\\output2.txt";
     std::string filename1=path+"\\output.txt";
+    std::cout<<filename1<<std::endl;
+    std::cout<<filename2<<std::endl;
 #else
     command = "nm -C \"" + path + "\"";
 #endif
