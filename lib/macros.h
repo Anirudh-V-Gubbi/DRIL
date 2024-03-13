@@ -2,7 +2,6 @@
 
 #ifdef _WIN32
 #include <windows.h>
-#include <fstream>
 #define OS_HANDLE HMODULE
 #define FPTR FARPROC
 #define lib_find(handle, symbol) GetProcAddress(handle, symbol)

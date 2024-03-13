@@ -9,17 +9,22 @@
 #include <stdio.h>
 #include <string>
 #include <unordered_map>
+#include "fileWatcher.h"
 
 // #############################################################################
 //                           DRIL
 // #############################################################################
 
-class DRIL
-{
+class DRIL {
 public:
-  DRIL(std::string path) : m_path(path), parser(path) {}
+  DRIL(std::string path) : m_path(path), parser(path)
+  {
+    m_path = path;
+    filewatcher.watchOverDirAndSubDir("pathToWatch", [this]()
+                                      { function(); });
+  }
 
-  void LoadLibrary() {dril_reload();}
+  void LoadLibrary() { Load(0); }
   void ReloadLibrary() { Reload(); }
 
   template <typename Ret, typename... Args>
@@ -67,8 +72,7 @@ private:
   void *m_libHandle;
   std::unordered_map<std::string, SymbolInfo> m_symbols;
 
-  bool copyFile(const char *sourcePath, const char *destinationPath)
-  {
+  bool copyFile(const char *sourcePath, const char *destinationPath) {
     // Open source file for reading in binary mode
     std::ifstream sourceFile(sourcePath, std::ios::binary);
     if (!sourceFile)
@@ -105,13 +109,10 @@ private:
     if (isWindowsReload == 0)
     {
       m_libHandle = dril_load(m_path.c_str());
-    }
-    else
-    {
-      std::string path =m_path ;
-      size_t pos = path.rfind('.');
-      if (pos != std::string::npos)
-      {
+    } else {
+      std::string path = m_path;
+      size_t pos = path.rfind('.'); // To find the last .
+      if (pos != std::string::npos) {
         path.insert(pos, "_Copy");
       }
       const char *CopyPath = path.c_str();
@@ -126,6 +127,18 @@ private:
     OS_HANDLE handle = static_cast<OS_HANDLE>(m_libHandle);
     dril_close(handle);
     m_symbols.clear();
+
+#ifdef _WIN32
+    std::string path = m_path;
+    size_t pos = path.rfind('.');
+    if (pos != std::string::npos) {
+      path.insert(pos, "_Copy");
+    }
+    const char *CopyPath = path.c_str();
+
+    copyFile(path.c_str(), CopyPath);
+#endif
+
     dril_reload();
   }
 
@@ -134,8 +147,7 @@ private:
     m_symbols = parser.ExtPrsSymbolTable();
 
     OS_HANDLE handle = static_cast<OS_HANDLE>(m_libHandle);
-    for (auto &symbol : m_symbols)
-    {
+    for (auto &symbol : m_symbols) {
       m_symbols[symbol.first].memory_adress =
           lib_find(handle, symbol.first.c_str());
     }

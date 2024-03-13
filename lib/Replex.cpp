@@ -1,11 +1,13 @@
 #include "Interface.h"
 
-int main() {
-  DRIL r("/path");
+int main()
+{
 
-  r.LoadLibrary();
+  DRIL r("dllPath");
+  r.LoadILibrary();
   std::cout << "Make some changes, recompile, and press enter." << std::flush;
-  while (std::cin.get() != '\n') {
+  while (std::cin.get() != '\n')
+  {
   }
-  r.ReloadLibrary();
+  return 0;
 }

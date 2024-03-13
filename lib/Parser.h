@@ -10,126 +10,44 @@
 
 constexpr int BUFFER_SIZE = 100;
 
-enum EntityType {
+enum EntityType
+{
   OBJECT,
   FUNC,
 };
 
-struct SymbolInfo {
+struct SymbolInfo
+{
   EntityType type;
   FPTR memory_adress;
 };
 
-class Parser {
+class Parser
+{
 public:
-  Parser(std::string path) {
+  Parser(std::string path)
+  {
 #ifdef _WIN32
-  command="vsdev.bat";
-  std::string filename2=path+"\\output2.txt";
-  std::string filename1=path+"\\output.txt";
+  command = "";
 #else
-    command = "nm -C " + path;
+    command = "nm -C \"" + path + "\"";
 #endif
+    std::cout << command << " \n";
   }
 
   std::unordered_map<std::string, SymbolInfo> ExtPrsSymbolTable() {
-#ifdef _WIN32
-    symbol_map.clear();
     read_pdata = popen(command.c_str(), "r");
-    if (!read_pdata) {
-        std::cerr << "Error opening read_pdata for command: " << command << std::endl;
-    }
-    while (fgets(buffer, sizeof(buffer), read_pdata) != nullptr) {
-    }
-    int status = pclose(read_pdata);
-    if (status == -1) {
-        std::cerr << "Error closing read_pdata for command: " << command << std::endl;
-    }
-    // TO STORE 
-    std::vector<std::string> names;
-    std::unordered_map<std::string, SymbolInfo> symbol_map;
-
-    // FILE STREAMS
-    std::ifstream file1(filename1);
-    std::ifstream file2(filename2);
-
-    if (file1.is_open())
+    if (!read_pdata)
     {
-        std::string line;
-        bool parsing = false;
-        std::regex pattern(R"(\b[^0-9\s][^\d]*[^0-9\s]\b)");
-
-        while (std::getline(file1, line))
-        {
-            if (line.find("RVA") != std::string::npos)
-            {
-                parsing = true;
-                continue;
-            }
-            if (line.find("Summary") != std::string::npos)
-            {
-                break;
-            }
-            if (parsing)
-            {
-                std::smatch matches;
-                std::sregex_iterator it(line.begin(), line.end(), pattern);
-                std::sregex_iterator end;
-                for (; it != end; ++it)
-                {
-                    names.push_back(it->str());
-                }
-            }
-        }
-        file1.close();
-    }
-    else
-    {
-        std::cerr << "Unable to open file: " << filename1 << std::endl;
-    }
-    
-    if (!file2.is_open())
-    {
-        std::cerr << "Unable to open file: " << filename2 << std::endl;
-        return symbol_map;
-    }
-
-    std::string line;
-    while (std::getline(file2, line))
-    {
-        for (const auto &searchString : names)
-        {
-            if (line.find(" _" + searchString) != std::string::npos)
-            {   
-                SymbolInfo symb_info;
-                EntityType type = EntityType::OBJECT; 
-                if (line.find("SECT1") != std::string::npos || line.find("SECT5") != std::string::npos ||
-                    line.find("SECT2") != std::string::npos)
-                {
-                    if (line.find("notype ()") != std::string::npos)
-                    {
-                        type = EntityType::FUNC;
-                    }
-                }
-                symb_info.type=type;
-                symbol_map[searchString] = symb_info;
-                break;                            
-            }
-        }
-    }
-    file2.close();
-
-    
-#else
-    read_pdata = popen(command.c_str(), "r");
-    if (!read_pdata) {
       throw std::runtime_error("popen() failed!");
     }
 
-    while (fgets(buffer, BUFFER_SIZE, read_pdata) != nullptr) {
+    while (fgets(buffer, BUFFER_SIZE, read_pdata) != nullptr)
+    {
       extracted_data += buffer;
     }
-    if (pclose(read_pdata) == -1) {
+    if (pclose(read_pdata) == -1)
+    {
       std::cerr << "pclose() failed!" << std::endl;
     }
 
@@ -144,15 +62,19 @@ public:
     std::smatch match;
     std::string type, name;
     SymbolInfo symb_info;
-    while (iterator != end) {
+    while (iterator != end)
+    {
       match = *iterator;
       type = match[1];
       name = match[2];
 
-      if (type == "T") {
+      if (type == "T")
+      {
         symb_info.type = EntityType::FUNC;
         symbol_map[name] = symb_info;
-      } else if(type == "D") {
+      }
+      else if (type == "D")
+      {
         symb_info.type = EntityType::OBJECT;
         symbol_map[name] = symb_info;
       }
@@ -164,23 +86,30 @@ public:
     std::string line;
     std::string str_type, str_name;
     std::istringstream line_stream;
-    SymbolInfo symb_info;
 
-    while (std::getline(input_stream, line)) {
+    while (std::getline(input_stream, line))
+    {
       line_stream.clear();
       line_stream.str(line);
 
-      if (line_stream >> str_type >> str_name) {
+      if (line_stream >> str_type >> str_name)
+      {
 
-        if (!symbol_map.count(str_name)) {
+        if (!symbol_map.count(str_name))
+        {
 
-          if (str_type == "FUNC") {
+          if (str_type == "FUNC")
+          {
             symb_info.type = EntityType::FUNC;
             symbol_map[str_name] = symb_info;
-          } else if (str_type == "OBJECT") {
+          }
+          else if (str_type == "OBJECT")
+          {
             symb_info.type = EntityType::OBJECT;
             symbol_map[str_name] = symb_info;
-          } else {
+          }
+          else
+          {
           }
         }
       }
