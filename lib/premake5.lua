@@ -107,11 +107,22 @@ function conf_excludes()
   end
 end
 
-project "efsw-static-lib"
-    kind "SharedLib"
+project "efsw-lib"
+    if os.istarget("windows") then
+      kind "StaticLib"
+    else 
+      kind "SharedLib"
+    end
     language "C++"
-    targetdir("../bin/%{cfg.buildcfg}")
+    targetdir("./bin")
     includedirs { "../dep/include", "../dep/src" }
+    
+    if os.istarget("windows") then
+      osfiles = "dep/src/efsw/platform/win/*.cpp"
+    else  
+      osfiles = "dep/src/efsw/platform/posix/*.cpp"
+    end
+
     files { "../dep/src/efsw/**.cpp", osfiles , "../dep/src/wrapper/**.cpp" }
     conf_excludes()
     conf_links()
@@ -126,11 +137,4 @@ project "efsw-static-lib"
     defines { "NDEBUG" }
     optimize "On"
     targetname "efsw-static-release"
-    conf_warnings()
-
-    filter "configurations:relwithdbginfo"
-    defines { "NDEBUG" }
-    symbols "On"
-    optimize "On"
-    targetname "efsw-static-reldbginfo"
     conf_warnings()

@@ -19,15 +19,25 @@ class DRIL
 {
 
 public:
-  DRIL(std::string path) : m_path(path), parser(path)
+  DRIL(std::string pathOfLib, std::string pathToWatch, std::string pathToBuild) : m_path(pathOfLib), parser(pathOfLib)
   {
-    m_path = path;
-    filewatcher.watchOverDirAndSubDir("pathToWatch", [this]()
-                                      { function(); });
+    filewatcher.watchOverDirAndSubDir(pathToWatch, [pathToBuild, this]() {
+      function(pathToBuild);
+    });
   }
 
   void LoadILibrary() { Load(0); }
   void ReloadLibrary() { Reload(); }
+
+  bool Exists(const char* name) const
+  {
+    for (auto symbol : m_symbols)
+    {
+      if(symbol.first == name && symbol.second.memory_adress != 0) return true;
+    }
+
+    return false;
+  }
 
   template <typename Ret, typename... Args>
   Ret Execute(const char *name, Args... args)
@@ -61,13 +71,6 @@ public:
     }
   }
 
-protected:
-  //   // Should return a reference to an array of C-strings of size NumSymbols
-  //   // Used when loading or reloading the library to lookup the address of
-  //   // all exported symbols
-  //   virtual std::array<const char *, NumSymbols> &GetSymbolNames() const = 0;
-  // }
-
 private:
   std::string m_path;
   Parser parser;
@@ -75,11 +78,13 @@ private:
   std::unordered_map<std::string, SymbolInfo> m_symbols;
   CustomFileWatcher filewatcher;
 
-  void function()
+  void function(std::string pathToBuild)
   {
-    std::string pathToBuild = "";
-    std::system("cd \"" + pathToBuild + "\" && make --file=FILE.make config=debug_x86_64");
-    std::cout << "\n";
+    OS_HANDLE handle = static_cast<OS_HANDLE>(m_libHandle);
+    dril_close(handle);
+
+    std::string command = "cd \"" + pathToBuild + "\" && make --file=OpenGLApplication.make";
+    std::system(command.c_str());
     ReloadLibrary();
   }
   bool copyFile(const char *sourcePath, const char *destinationPath)
@@ -133,6 +138,7 @@ private:
       m_libHandle = dril_load(CopyPath);
     }
     LoadSymbols();
+    std::cout << "Library " << m_libHandle << " loaded\n";
   }
 
   void Reload()
@@ -152,7 +158,7 @@ private:
 
     copyFile(path.c_str(), CopyPath);
 #endif
-
+    
     dril_reload();
   }
 
@@ -163,7 +169,6 @@ private:
     OS_HANDLE handle = static_cast<OS_HANDLE>(m_libHandle);
     for (auto &symbol : m_symbols)
     {
-      std::cout << symbol.first << std::endl;
       m_symbols[symbol.first].memory_adress =
           lib_find(handle, symbol.first.c_str());
     }

@@ -1,3 +1,18 @@
+# Builds
+**/bin*
+**/obj
+**/build
+*.DS_Store
+
+# Redundant
+**/glm/doc
+**/glm/test
+**/glm/util
+**/glfw/docs
+**/glfw/examples
+**/glfw/tests
+**/glfw/CMake
+
 # Prerequisites
 *.d
 
