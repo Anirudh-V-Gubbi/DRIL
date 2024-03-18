@@ -30,7 +30,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 const glm::ivec2 SCREEN_DIMENSIONS(1000, 675);
 const glm::mat4 viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, -1.0f));
 const glm::mat4 projectionMatrix = glm::ortho<float>(0.0f, SCREEN_DIMENSIONS.x, SCREEN_DIMENSIONS.y, 0.0f, -0.1f, 100.0f);
-
+glm::mat4 trans = glm::mat4(1.0f);
 int main()
 {
     // glfw: initialize and configure
@@ -182,6 +182,11 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 }
 
 
+void processInput(GLFWwindow *window)
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+}
 
 ////////////////////////////////////////////////////////
 // #include "../dep/Glad/include/glad/glad.h"
