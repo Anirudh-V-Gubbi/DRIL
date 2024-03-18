@@ -89,12 +89,13 @@ private:
             glGenerateMipmap(GL_TEXTURE_2D);
         }
         else {
-            Logger::GetInstance()->error("Failed to load texture", m_textureName);
+            std::cout << "Failed to load texture" << m_textureName;
+            // Logger::GetInstance()->error("Failed to load texture", m_textureName);
         }
     }
 
     std::string getTextureFullPath(std::string path) {
-        return std::string(RESOURCE_PATH) + "textures/" + path;
+        return std::string(RESOURCE_PATH) + "textures\\" + path;
     }
 };
 

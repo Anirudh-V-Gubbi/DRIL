@@ -2,9 +2,12 @@
 #define ENTITY_H
 
 #include <glad/glad.h>
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
-#include <glm/mat4x4.hpp>
+#include "..\dep\glm\glm\vec2.hpp"
+#include "..\dep\glm\glm\vec3.hpp"
+#include "..\dep\glm\glm\mat4x4.hpp"
+//#include <glm/vec2.hpp>
+//#include <glm/vec3.hpp>
+//#include <glm/mat4x4.hpp>
 #include "../Shaders/shader.h"
 #include "../Textures/texture.h"
 #include "../Logger/logger.h"
@@ -16,7 +19,9 @@ class Entity {
 public:
 
     Entity(Shader shader, Texture texture, glm::vec3 position) : m_shader{shader}, m_texture{texture}, m_position{position} {
-        setup();
+        std::cout << "Entity" << std::endl
+     ;   setup();
+        std::cout << " DOne " << std::endl;
     }
     
     ~Entity() { }

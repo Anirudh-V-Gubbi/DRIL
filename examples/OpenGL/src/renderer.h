@@ -2,7 +2,7 @@
 #define RENDERER_H
 
 #include <glad/glad.h>
-#include <glm/mat4x4.hpp>
+#include "..\dep\glm\glm\mat4x4.hpp"
 #include "Entities/entity.h"
 
 #include <vector>

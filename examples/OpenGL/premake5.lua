@@ -5,7 +5,7 @@ workspace "OpenGL"
   targetdir "bin/%{cfg.buildcfg}"
   location "build"
   outputdir= "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
-  defines { "RESOURCE_PATH=\"abspath/resources/\"" }
+ -- defines { "RESOURCE_PATH=\"abspath/resources/\"" }
 
   -- Activates verbose mode
   if _OPTIONS["verbose"] then
