@@ -95,7 +95,7 @@ private:
     }
 
     std::string getTextureFullPath(std::string path) {
-        return std::string(RESOURCE_PATH) + "textures\\" + path;
+        return std::string(RESOURCE_PATH) + "textures/" + path;
     }
 };
 

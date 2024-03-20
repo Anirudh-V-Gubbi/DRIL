@@ -5,7 +5,13 @@ workspace "OpenGL"
   targetdir "bin/%{cfg.buildcfg}"
   location "build"
   outputdir= "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
---  defines { "RESOURCE_PATH=\"abspath/resources/\"" }
+
+ defines {
+  "RESOURCE_PATH=\"" .. _WORKING_DIR .. "/resources/" .. "\"",
+  "DLL_PATH=\"" ..  _WORKING_DIR .. "/bin/%{cfg.buildcfg}" .. "\"",
+  "APPLICATION_PATH=\"" ..  _WORKING_DIR .. "/application/" .. "\"",
+  "OUTPUT_PATH=\"" .. _WORKING_DIR .. "/build/" .. "\"" 
+  }
 
   -- Activates verbose mode
   if _OPTIONS["verbose"] then
@@ -29,12 +35,11 @@ workspace "OpenGL"
   project "OpenGLApplication"
     kind "SharedLib"
     location "build"
-    files { "application/*.cpp", "dep/stb_image/*.cpp", "../../lib/*.cpp"}
-    includedirs { "dep/Glad/include/", "dep/glfw/include/", "src/", "dep/stb_image", "../../dep/include", "../../dep/src"}
+    files { "application/*.cpp", "dep/stb_image/*.cpp"}
+    includedirs { "dep/Glad/include/", "dep/glfw/include/", "src/", "dep/stb_image"}
     links { 
       "GLFW",
-      "Glad",
-      "efsw-lib"
+      "Glad"
     }
 
     filter "system:windows"

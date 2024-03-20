@@ -10,7 +10,6 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "../Logger/logger.h"
-#define RESOURCE_PATH R"(G:\DRIL\examples\OpenGL\resources\)"
 
 class Shader {
 public:
@@ -156,7 +155,7 @@ private:
     }
 
     std::string getShaderFullPath(std::string path) {
-        return std::string(RESOURCE_PATH) + "shaders\\" + path;
+        return std::string(RESOURCE_PATH) + "shaders/" + path;
     }
 };
 

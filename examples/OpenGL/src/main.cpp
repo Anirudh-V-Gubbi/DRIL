@@ -1,5 +1,3 @@
-#define RESOURCE_PATH R"(G:\DRIL\examples\OpenGL\resources\)"
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/vec2.hpp>
@@ -43,8 +41,6 @@ int main()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-    std::string s(RESOURCE_PATH);
-    std::cout << s << std::endl;
 
     // Initialise the logger
     // new Logger("Logger");
@@ -86,9 +82,9 @@ int main()
     // Dynamically reloadable interface setup
     // --------------------------------------
     DRIL applicationInterface(
-    R"(G:\DRIL\examples\OpenGL\bin\debug\OpenGLApplication.dll)",
-    R"(G:\DRIL\examples\OpenGL\application)",
-    R"(G:\DRIL\examples\OpenGL\build)");
+    DLL_PATH "/libOpenGLApplication.dylib",
+    APPLICATION_PATH,
+    OUTPUT_PATH);
     applicationInterface.LoadILibrary();
 
     // Event listener
