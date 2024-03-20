@@ -2,8 +2,7 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-//#include <glm/vec2.hpp>
-#include "..\dep\glm\glm\vec2.hpp"
+#include <glm/vec2.hpp>
 #include "Shaders/shader.h"
 #include "Textures/texture.h"
 #include "Logger/logger.h"

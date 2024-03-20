@@ -4,7 +4,7 @@
 #include <Logger/logger.h>
 #include <PubSub/publisher.h>
 #include <map>
-#include "..\dep\glm\glm\vec2.hpp"
+#include <glm/vec2.hpp>
 #include "application_event.h"
 #include "key_event.h"
 #include "mouse_event.h"
