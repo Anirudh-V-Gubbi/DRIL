@@ -5,8 +5,14 @@ workspace "OpenGL"
   targetdir "bin/%{cfg.buildcfg}"
   location "build"
   outputdir= "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
-  defines { "RESOURCE_PATH=\"abspath/resources/\"" }
-
+ 
+  defines {
+  "RESOURCE_PATH=\"" .. _PREMAKE_DIR .. "/resources/" .. "\"",
+  "DLL_PATH=\"" ..  _PREMAKE_DIR .. "/bin/%{cfg.buildcfg}" .. "\"",
+  "LIB_PATH=\"" ..  _PREMAKE_DIR .. "/src/" .. "\"",
+  "OUTPUT_PATH=\"" .. _PREMAKE_DIR .. "/build/" .. "\"" 
+  }
+  
   -- Activates verbose mode
   if _OPTIONS["verbose"] then
     defines { "EFSW_VERBOSE" }
