@@ -36,7 +36,7 @@ workspace "OpenGL"
     kind "SharedLib"
     location "build"
     files { "application/*.cpp", "dep/stb_image/*.cpp"}
-    includedirs { "dep/Glad/include/", "dep/glfw/include/", "src/", "dep/stb_image"}
+    includedirs { "dep/Glad/include/", "dep/glfw/include/", "src/", "dep/stb_image", "dep/glm"}
     links { 
       "GLFW",
       "Glad"
@@ -53,7 +53,8 @@ workspace "OpenGL"
     kind "ConsoleApp"
     location "build"
     files { "src/*.cpp", "../../lib/*.cpp", "dep/stb_image/*.cpp"}
-    includedirs { 
+    includedirs {
+      "dep/glm", 
       "dep/Glad/include/",
       "dep/glfw/include/",
       "dep/stb_image",

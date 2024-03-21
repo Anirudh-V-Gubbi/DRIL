@@ -82,7 +82,7 @@ int main()
     // Dynamically reloadable interface setup
     // --------------------------------------
     DRIL applicationInterface(
-    DLL_PATH "/libOpenGLApplication.dylib",
+    DLL_PATH "/OpenGLApplication.dll",
     APPLICATION_PATH,
     OUTPUT_PATH);
     applicationInterface.LoadILibrary();

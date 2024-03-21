@@ -24,7 +24,7 @@
 #include <iostream>
 
 extern "C" {
-    __declspec(dllexport) void click(GLFWwindow* window, int button, int action, int mods);
-    __declspec(dllexport) void giveOutput(GLFWwindow *window, int texture, int shaderProgram, int VAO);
+    __declspec(dllexport) void OnEvent(Event* event, GLFWwindow* window, Renderer* renderer);
+   // __declspec(dllexport) void giveOutput(GLFWwindow *window, int texture, int shaderProgram, int VAO);
 }
 #endif
