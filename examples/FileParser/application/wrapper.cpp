@@ -4,6 +4,7 @@ void parseFile(std::string file_name)
 {
     try
     {
+        std::cout << file_name << std::endl;
         std::ifstream fin(file_name);
         std::stringstream ss;
         ss << fin.rdbuf();
@@ -16,7 +17,7 @@ void parseFile(std::string file_name)
         std::cout<<name<<'\n';
         int type = json["age"];
         std::cout<<type<<'\n';
-        const string & area = json["area"][0];
+        const string & area = json["area"][2];
         std::cout<<area<<'\n';
         json.clear();
     }

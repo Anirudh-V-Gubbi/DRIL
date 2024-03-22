@@ -19,15 +19,20 @@ class DRIL
 {
 
 public:
-  DRIL(std::string pathOfLib, std::string pathToWatch, std::string pathToBuild) : m_path(pathOfLib), parser(pathOfLib)
+  DRIL(std::string pathOfLib) : m_path(pathOfLib), parser(pathOfLib)
   {
-    filewatcher.watchOverDirAndSubDir(pathToWatch, [pathToBuild, this]() {
-      function(pathToBuild);
-    });
+    
   }
 
   void LoadILibrary() { dril_reload(); }
   void ReloadLibrary() { Reload(); }
+
+  void Initialise(std::string pathToWatch, std::string pathToBuild, std::function<void()> callback) {
+    filewatcher.watchOverDirAndSubDir(pathToWatch, [pathToBuild, callback, this]() {
+      function(pathToBuild);
+      callback();
+    });
+  }
 
   bool Exists(const char* name) const
   {
@@ -159,7 +164,7 @@ private:
     {
       m_symbols[symbol.first].memory_adress =
           lib_find(handle, symbol.first.c_str());
-          std::cout<<symbol.first<<std::endl;
+          // std::cout<<symbol.first<<std::endl;
     }
   }
 };

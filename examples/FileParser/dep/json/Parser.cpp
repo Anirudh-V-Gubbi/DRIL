@@ -31,7 +31,6 @@ char Parser::get_next_token()
 {
     skip_white_space();
     if (m_idx == m_str.size()) {
-        std::cout << m_idx << " " << m_str.size() << std::endl;
         throw std::logic_error("unexpected end of input");
         }
     return m_str[m_idx++];
