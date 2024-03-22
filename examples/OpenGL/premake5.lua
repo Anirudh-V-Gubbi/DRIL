@@ -52,7 +52,7 @@ workspace "OpenGL"
   project "OpenGLRuntime"
     kind "ConsoleApp"
     location "build"
-    files { "src/*.cpp", "../../lib/*.cpp", "dep/stb_image/*.cpp"}
+    files { "src/*.cpp", "../../lib/*.cpp", "dep/stb_image/*.cpp", "application/*.cpp"}
     includedirs {
       "dep/glm", 
       "dep/Glad/include/",
