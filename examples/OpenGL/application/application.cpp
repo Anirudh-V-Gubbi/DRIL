@@ -11,9 +11,13 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/glm.hpp>
 
-float x = 0.0002f;
-float y = 0.0003f;
+float x = 0.00002f;
+float y = 0.00001f;
+float r = 1.0f;
+float g = 1.0f;
+float b = 0.0f;
 std::string image = "img.jpg";
+// TextureFormats format = TextureFormats::JPG;
 
 extern "C" {
     float GetX() {
@@ -26,4 +30,20 @@ extern "C" {
     std::string GetTex() {
         return image;
     }
+
+    float GetR(){
+        return r;
+    }
+
+    float GetG(){
+        return g;
+    }
+
+    float GetB(){
+        return b;
+    }
+
+    //  TextureFormats GetFormat(){
+    //     return format;
+    //  }
 }

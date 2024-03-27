@@ -14,10 +14,15 @@ extern "C" {
     extern float x;
     extern float y;
     extern std::string image;
+    // extern TextureFormats format;
 
     __declspec(dllexport) float GetX();
     __declspec(dllexport) float GetY();
+    __declspec(dllexport) float GetR();
+    __declspec(dllexport) float GetG();
+    __declspec(dllexport) float GetB();
     __declspec(dllexport) std::string GetTex();
+    // __declspec(dllexport) TextureFormats GetFormat();
 
 }
 #endif

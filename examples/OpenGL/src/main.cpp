@@ -140,16 +140,23 @@ int main()
     glEnable(GL_DEPTH_TEST); // Enable depth testing
 
     Renderer *renderer = new Renderer();
-    renderer->SetBackgroundColor({1, 0, 0, 1});
+    
 
     float xx =0.0003;//((float)glfwGetTime())/1000> 0.005 ? 0:(float)glfwGetTime()/1000;
-    float yy =-0.0002;
+    float yy =-0.00;
+    float rr=0.0;
+    float gg=0.0;
+    float bb=0.0;
 
     DRIL applicationInterface(DLL_PATH "/OpenGLApplication.dll");
-    applicationInterface.Initialise(APPLICATION_PATH, OUTPUT_PATH, [&applicationInterface, &xx, &yy]() {
+    applicationInterface.Initialise(APPLICATION_PATH, OUTPUT_PATH, [&applicationInterface, &xx, &yy, &rr, &gg, &bb]() {
         xx = applicationInterface.Execute<float>("GetX");
         yy = applicationInterface.Execute<float>("GetY");
+        rr = applicationInterface.Execute<float>("GetR");
+        gg = applicationInterface.Execute<float>("GetG");
+        bb = applicationInterface.Execute<float>("GetB");
     });
+    renderer->SetBackgroundColor({rr, gg, bb, 1});
     applicationInterface.LoadILibrary();
 
     xx = applicationInterface.Execute<float>("GetX");
@@ -171,11 +178,12 @@ int main()
     
     if (nextPosition.x >= 0.5 || nextPosition.x <= -0.5)
     {
-trans = glm::scale(trans, glm::vec3(-1.0f, 1.0f, 1.0f));    
+//trans = glm::scale(trans, glm::vec3(-1.0f, 1.0f, 1.0f)); 
+xx=-xx;   
     }
     if (nextPosition.y >= 0.5 || nextPosition.y <= -0.5)
-    {
-trans = glm::scale(trans, glm::vec3(1.0f, -1.0f, 1.0f));    
+    {  yy=-yy; 
+//trans = glm::scale(trans, glm::vec3(1.0f, -1.0f, 1.0f)); 
     }
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
