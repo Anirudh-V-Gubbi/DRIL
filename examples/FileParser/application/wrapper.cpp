@@ -12,12 +12,24 @@ void parseFile(std::string file_name)
 
         yazi::json::Json json;
         json.parse(data);
+       
 
+        
+        
+        
+        
+        
+        
+        
+        
+        
         const string & name = json["name"];
         std::cout<<name<<'\n';
         int type = json["age"];
         std::cout<<type<<'\n';
-        const string & area = json["area"][2];
+        const string & college=json["college"];
+        std::cout<<college<<'\n';
+        const string & area = json["area"][0];
         std::cout<<area<<'\n';
         json.clear();
     }
