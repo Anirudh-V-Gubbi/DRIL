@@ -34,8 +34,11 @@ public:
     command=R"(G:\DRIL\lib\vsdev.bat)";
     filename2=R"(G:\DRIL\examples\OpenGL\bin\debug\output2.txt)";
     filename1=R"(G:\DRIL\examples\OpenGL\bin\debug\output.txt)";
-#else
+#elseif __APPLE__
     command = "nm -C \"" + path + "\"";
+#else
+    command = "readelf -Ws "+ path +R"( | awk '/Symbol table '\''\.dynsym'\''/ {flag=1; next} flag && $2 != "0000000000000000" && NR > 5 {print $4, $8} flag && /^$/ {exit}'
+            )";
 #endif
   }
 
@@ -126,7 +129,7 @@ public:
       }
     }
     file2.close();
-#else
+#elseif __APPLE__
     read_pdata = popen(command.c_str(), "r");
     if (!read_pdata)
     {
@@ -202,6 +205,57 @@ public:
           }
         }
       }
+    }
+#else
+    read_pdata = popen(command.c_str(), "r");
+    if (!read_pdata) 
+    {
+        throw std::runtime_error("popen() failed!");
+    }
+    
+    while (fgets(buffer, BUFFER_SIZE, read_pdata) != nullptr) 
+    {
+        extracted_data += buffer;
+    }
+    if (pclose(read_pdata) == -1) 
+    {
+    std::cerr << "pclose() failed!" << std::endl;
+    }
+    std::istringstream input_stream(extracted_data);
+    std::string line;
+    std::string str_type,str_name;
+    std::istringstream line_stream;
+    struct SymbolInfo symb_info;
+    symbol_map.clear();
+    while (std::getline(input_stream, line)) 
+    {
+        
+        line_stream.clear();
+        line_stream.str(line);
+        if (line_stream >> str_type >> str_name) 
+        {
+            
+            if(!symbol_map.count(str_name))
+            {
+                
+                if(str_type=="FUNC")
+                {
+                    symb_info.type=EntityType::FUNC;
+                    symbol_map[str_name]=symb_info;
+                }
+                else if(str_type=="OBJECT")
+                {
+                    symb_info.type=EntityType::OBJECT;
+                    symbol_map[str_name]=symb_info;
+                }
+                else
+                {
+
+                }
+            }
+        
+        
+        } 
     }
 #endif
 
