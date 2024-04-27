@@ -19,15 +19,20 @@ class DRIL
 {
 
 public:
-  DRIL(std::string pathOfLib, std::string pathToWatch, std::string pathToBuild) : m_path(pathOfLib), parser(pathOfLib)
+  DRIL(std::string pathOfLib) : m_path(pathOfLib), parser(pathOfLib)
   {
-    filewatcher.watchOverDirAndSubDir(pathToWatch, [pathToBuild, this]() {
-      function(pathToBuild);
-    });
+    
   }
 
-  void LoadILibrary() { Load(0); }
+  void LoadILibrary() { dril_reload(); }
   void ReloadLibrary() { Reload(); }
+
+  void Initialise(std::string pathToWatch, std::string pathToBuild, std::function<void()> callback) {
+    filewatcher.watchOverDirAndSubDir(pathToWatch, [pathToBuild, this, callback]() {
+      function(pathToBuild);
+      callback();
+    });
+  }
 
   bool Exists(const char* name) const
   {
@@ -83,7 +88,7 @@ private:
     OS_HANDLE handle = static_cast<OS_HANDLE>(m_libHandle);
     dril_close(handle);
 
-    std::string command = "cd \"" + pathToBuild + "\" && make --file=OpenGLApplication.make";
+    std::string command = "cd \"" + pathToBuild + "\" && make";
     std::system(command.c_str());
     ReloadLibrary();
   }
@@ -128,39 +133,27 @@ private:
     }
     else
     {
-      std::string path = m_path;
-      size_t pos = path.rfind('.'); // To find the last .
+      std::string path =m_path ;
+      size_t pos = path.rfind('.');
       if (pos != std::string::npos)
       {
         path.insert(pos, "_Copy");
       }
       const char *CopyPath = path.c_str();
+      copyFile(m_path.c_str(), CopyPath);
       m_libHandle = dril_load(CopyPath);
     }
     LoadSymbols();
-    std::cout << "Library " << m_libHandle << " loaded\n";
   }
 
   void Reload()
   {
     OS_HANDLE handle = static_cast<OS_HANDLE>(m_libHandle);
-    dril_close(handle);
+    // dril_close(handle);
     m_symbols.clear();
-
-#ifdef _WIN32
-    std::string path = m_path;
-    size_t pos = path.rfind('.');
-    if (pos != std::string::npos)
-    {
-      path.insert(pos, "_Copy");
-    }
-    const char *CopyPath = path.c_str();
-
-    copyFile(path.c_str(), CopyPath);
-#endif
-    
     dril_reload();
   }
+
 
   void LoadSymbols()
   {
@@ -171,6 +164,7 @@ private:
     {
       m_symbols[symbol.first].memory_adress =
           lib_find(handle, symbol.first.c_str());
+          // std::cout<<symbol.first<<std::endl;
     }
   }
 };

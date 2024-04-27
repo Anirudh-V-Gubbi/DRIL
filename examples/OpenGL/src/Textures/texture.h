@@ -100,9 +100,9 @@ private:
             glTexImage2D(GL_TEXTURE_2D, 0, format == TextureFormats::PNG ? GL_RGBA : GL_RGB, specs.width, specs.height, 0, format == TextureFormats::PNG ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, specs.data);
             glGenerateMipmap(GL_TEXTURE_2D);
         }
-        else
-        {
-            Logger::GetInstance()->error("Failed to load texture", m_textureName);
+        else {
+            std::cout << "Failed to load texture" << m_textureName;
+            // Logger::GetInstance()->error("Failed to load texture", m_textureName);
         }
     }
 

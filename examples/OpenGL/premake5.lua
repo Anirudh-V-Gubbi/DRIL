@@ -5,14 +5,14 @@ workspace "OpenGL"
   targetdir "bin/%{cfg.buildcfg}"
   location "build"
   outputdir= "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
- 
-  defines {
-  "RESOURCE_PATH=\"" .. _PREMAKE_DIR .. "/resources/" .. "\"",
-  "DLL_PATH=\"" ..  _PREMAKE_DIR .. "/bin/%{cfg.buildcfg}" .. "\"",
-  "LIB_PATH=\"" ..  _PREMAKE_DIR .. "/src/" .. "\"",
-  "OUTPUT_PATH=\"" .. _PREMAKE_DIR .. "/build/" .. "\"" 
+
+ defines {
+  "RESOURCE_PATH=\"" .. _WORKING_DIR .. "/resources/" .. "\"",
+  "DLL_PATH=\"" ..  _WORKING_DIR .. "/bin/%{cfg.buildcfg}" .. "\"",
+  "APPLICATION_PATH=\"" ..  _WORKING_DIR .. "/application/" .. "\"",
+  "OUTPUT_PATH=\"" .. _WORKING_DIR .. "/build/" .. "\"" 
   }
-  
+
   -- Activates verbose mode
   if _OPTIONS["verbose"] then
     defines { "EFSW_VERBOSE" }
@@ -36,7 +36,7 @@ workspace "OpenGL"
     kind "SharedLib"
     location "build"
     files { "application/*.cpp", "dep/stb_image/*.cpp"}
-    includedirs { "dep/Glad/include/", "dep/glfw/include/", "src/", "dep/stb_image"}
+    includedirs { "dep/Glad/include/", "dep/glfw/include/", "src/", "dep/stb_image", "dep/glm"}
     links { 
       "GLFW",
       "Glad"
@@ -48,12 +48,26 @@ workspace "OpenGL"
         "shell32", 
         "gdi32"
       }
+      defines {
+        "DRIL_EXPORT=__declspec(dllexport)"
+      }
+    
+    filter "system:linux"
+      defines {
+        "DRIL_EXPORT= "
+      }
+    
+    filter "system:macosx"
+      defines {
+        "DRIL_EXPORT= "
+      }
   
   project "OpenGLRuntime"
     kind "ConsoleApp"
     location "build"
     files { "src/*.cpp", "../../lib/*.cpp", "dep/stb_image/*.cpp"}
-    includedirs { 
+    includedirs {
+      "dep/glm", 
       "dep/Glad/include/",
       "dep/glfw/include/",
       "dep/stb_image",
@@ -76,4 +90,17 @@ workspace "OpenGL"
         "opengl32",
         "shell32", 
         "gdi32"
+      }
+      defines {
+        "DRIL_EXPORT=__declspec(dllexport)"
+      }
+    
+    filter "system:linux"
+      defines {
+        "DRIL_EXPORT= "
+      }
+    
+    filter "system:macosx"
+      defines {
+        "DRIL_EXPORT= "
       }
