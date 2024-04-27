@@ -34,7 +34,7 @@ public:
     command=R"(G:\DRIL\lib\vsdev.bat)";
     filename2=R"(G:\DRIL\examples\OpenGL\bin\debug\output2.txt)";
     filename1=R"(G:\DRIL\examples\OpenGL\bin\debug\output.txt)";
-#elseif __APPLE__
+#elif __APPLE__
     command = "nm -C \"" + path + "\"";
 #else
     command = "readelf -Ws "+ path +R"( | awk '/Symbol table '\''\.dynsym'\''/ {flag=1; next} flag && $2 != "0000000000000000" && NR > 5 {print $4, $8} flag && /^$/ {exit}'
@@ -129,7 +129,7 @@ public:
       }
     }
     file2.close();
-#elseif __APPLE__
+#elif __APPLE__
     read_pdata = popen(command.c_str(), "r");
     if (!read_pdata)
     {

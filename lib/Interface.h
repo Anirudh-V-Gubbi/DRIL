@@ -164,7 +164,7 @@ private:
     {
       m_symbols[symbol.first].memory_adress =
           lib_find(handle, symbol.first.c_str());
-          std::cout<<symbol.first<<std::endl;
+          // std::cout<<symbol.first<<std::endl;
     }
   }
 };
