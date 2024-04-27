@@ -9,14 +9,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <glm/gtc/type_ptr.hpp>
-#include <glm/glm.hpp>
 
 float x = 0.00002f;
 float y = 0.00001f;
 float r = 1.0f;
 float g = 1.0f;
 float b = 0.0f;
-std::string image = "img.jpg";
+const char* image = "img.jpg";
 // TextureFormats format = TextureFormats::JPG;
 
 extern "C" {
@@ -27,7 +26,7 @@ extern "C" {
         return y;
     }
 
-    std::string GetTex() {
+    const char* GetTex() {
         return image;
     }
 

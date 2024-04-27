@@ -5,7 +5,6 @@
 #include <GLFW/glfw3.h>
 #include <Event/event_handler.h>
 #include <renderer.h>
-#include <string>
 
 #include <iostream>
 
@@ -13,16 +12,16 @@ extern "C" {
 
     extern float x;
     extern float y;
-    extern std::string image;
+    extern const char* image;
     // extern TextureFormats format;
 
-    __declspec(dllexport) float GetX();
-    __declspec(dllexport) float GetY();
-    __declspec(dllexport) float GetR();
-    __declspec(dllexport) float GetG();
-    __declspec(dllexport) float GetB();
-    __declspec(dllexport) std::string GetTex();
-    // __declspec(dllexport) TextureFormats GetFormat();
+    DRIL_EXPORT float GetX();
+    DRIL_EXPORT float GetY();
+    DRIL_EXPORT float GetR();
+    DRIL_EXPORT float GetG();
+    DRIL_EXPORT float GetB();
+    DRIL_EXPORT const char* GetTex();
+    // DRIL_EXPORT TextureFormats GetFormat();
 
 }
 #endif

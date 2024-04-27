@@ -1,16 +1,15 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stb_image.h>
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include <PubSub/subscriber.h>
+#include "renderer.h"
+#include <Event/event_handler.h>
 #include "../../../lib/Interface.h"
-#include "Event/event.h"
-#include "PubSub/subscriber.h"
-#include "renderer.h"
 #include "../application/application.h"
-#include "Event/event_handler.h"
-#include "renderer.h"
+
 #include <iostream>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);

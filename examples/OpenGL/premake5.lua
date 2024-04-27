@@ -48,11 +48,24 @@ workspace "OpenGL"
         "shell32", 
         "gdi32"
       }
+      defines {
+        "DRIL_EXPORT=__declspec(dllexport)"
+      }
+    
+    filter "system:linux"
+      defines {
+        "DRIL_EXPORT= "
+      }
+    
+    filter "system:macosx"
+      defines {
+        "DRIL_EXPORT= "
+      }
   
   project "OpenGLRuntime"
     kind "ConsoleApp"
     location "build"
-    files { "src/*.cpp", "../../lib/*.cpp", "dep/stb_image/*.cpp", "application/*.cpp"}
+    files { "src/*.cpp", "../../lib/*.cpp", "dep/stb_image/*.cpp"}
     includedirs {
       "dep/glm", 
       "dep/Glad/include/",
@@ -77,4 +90,17 @@ workspace "OpenGL"
         "opengl32",
         "shell32", 
         "gdi32"
+      }
+      defines {
+        "DRIL_EXPORT=__declspec(dllexport)"
+      }
+    
+    filter "system:linux"
+      defines {
+        "DRIL_EXPORT= "
+      }
+    
+    filter "system:macosx"
+      defines {
+        "DRIL_EXPORT= "
       }
