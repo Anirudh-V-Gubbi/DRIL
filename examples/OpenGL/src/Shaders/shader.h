@@ -11,11 +11,13 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "../Logger/logger.h"
 
-class Shader {
+class Shader
+{
 public:
     unsigned int ID;
 
-    Shader(std::string vertexPath, std::string fragmentPath) {
+    Shader(std::string vertexPath, std::string fragmentPath)
+    {
         // create a struct to hold shader code, deallocated in compileShaders()
         // std::cout << "compiled1 ";
         shaderCode = new ShaderCodes();
@@ -29,57 +31,65 @@ public:
         std::cout << "compiled5 " << getShaderFullPath(vertexPath);
     }
 
-    ~Shader() {
+    ~Shader()
+    {
     }
-    
-    void Use() const {
+
+    void Use() const
+    {
         glUseProgram(this->ID);
     };
-    
-    void SetMatrix4f(const char* name, glm::mat4 matrix) const {
+
+    void SetMatrix4f(const char *name, glm::mat4 matrix) const
+    {
         glUniformMatrix4fv(glGetUniformLocation(this->ID, name), 1, GL_FALSE, glm::value_ptr(matrix));
     }
-    
-    void SetVector2f(const char* name, glm::vec2 vector) const {
+
+    void SetVector2f(const char *name, glm::vec2 vector) const
+    {
         glUniform2fv(glGetUniformLocation(this->ID, name), 1, glm::value_ptr(vector));
     }
-    
-    void SetVector3f(const char* name, glm::vec3 vector) const {
+
+    void SetVector3f(const char *name, glm::vec3 vector) const
+    {
         glUniform3fv(glGetUniformLocation(this->ID, name), 1, glm::value_ptr(vector));
     }
-    
-    void SetInteger1i(const char* name, int unit) const {
+
+    void SetInteger1i(const char *name, int unit) const
+    {
         glUniform1i(glGetUniformLocation(this->ID, name), unit);
     }
-    
-private:
 
-    struct ShaderCodes {
+private:
+    struct ShaderCodes
+    {
         std::string vertexCode;
         std::string fragmentCode;
     } *shaderCode;
 
     std::string m_shaderName;
-    
-    void readFiles(std::string vertexPath, std::string fragPath){
+
+    void readFiles(std::string vertexPath, std::string fragPath)
+    {
         std::ifstream vShaderFile;
         std::ifstream fShaderFile;
-        
+
         vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
         fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-        
-        try {
+
+        try
+        {
             vShaderFile.open(vertexPath.c_str());
             fShaderFile.open(fragPath.c_str());
-            
+
             std::stringstream sCodeBuffer, fCodeBuffer;
-            
+
             sCodeBuffer << vShaderFile.rdbuf();
             fCodeBuffer << fShaderFile.rdbuf();
-            
+
             this->shaderCode->vertexCode = sCodeBuffer.str();
             this->shaderCode->fragmentCode = fCodeBuffer.str();
-            
+
             vShaderFile.close();
             fShaderFile.close();
         }
@@ -117,44 +127,47 @@ private:
             std::cout << "Failed to compile" << m_shaderName << "vertex shader -\n" << infolog;
             // Logger::GetInstance()->error("Failed to compile", m_shaderName, "vertex shader -\n", infolog);
         }
-        
-        //create fragment shader
+
+        // create fragment shader
         fragID = glCreateShader(GL_FRAGMENT_SHADER);
         glShaderSource(fragID, 1, &fragmentCode, NULL);
         glCompileShader(fragID);
-        
+
         glGetShaderiv(fragID, GL_COMPILE_STATUS, &success);
-        
-        //fragment shader compilation failed
-        if(!success) {
+
+        // fragment shader compilation failed
+        if (!success)
+        {
             glGetShaderInfoLog(fragID, 512, NULL, infolog);
             std::cout << "Failed to compile" << m_shaderName << "fragment shader -\n" << infolog;
             // Logger::GetInstance()->error("Failed to compile", m_shaderName, "fragment shader -\n", infolog);
         }
-        
-        //create and link shader program
+
+        // create and link shader program
         this->ID = glCreateProgram();
         glAttachShader(this->ID, vertexID);
         glAttachShader(this->ID, fragID);
         glLinkProgram(this->ID);
-        
+
         glGetProgramiv(this->ID, GL_LINK_STATUS, &success);
-        
-        //shader program linking fails
-        if(!success) {
+
+        // shader program linking fails
+        if (!success)
+        {
             glGetProgramInfoLog(this->ID, 512, NULL, infolog);
             std::cout << "Failed to link" << m_shaderName << "shader program -\n" << infolog << std::endl;
             // Logger::GetInstance()->error("Failed to link", m_shaderName, "shader program -\n", infolog);
         }
-        
-        //delete shader objects
+
+        // delete shader objects
         glDeleteShader(vertexID);
         glDeleteShader(fragID);
-        
+
         delete shaderCode;
     }
 
-    std::string getShaderFullPath(std::string path) {
+    std::string getShaderFullPath(std::string path)
+    {
         return std::string(RESOURCE_PATH) + "shaders/" + path;
     }
 };
