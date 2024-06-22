@@ -26,7 +26,7 @@
 ## The Role of the Interface within the Build System.
  
 
-![](https://github.com/Anirudh-V-Gubbi/DRIL/blob/main/images/Screenshot%20from%202024-06-22%2019-31-58.png)  |  
+![](https://github.com/Anirudh-V-Gubbi/DRIL/blob/main/images/Screenshot%20from%202024-06-22%2019-31-58.png)  
 
 
 ## Tech Stack
