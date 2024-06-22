@@ -10,16 +10,16 @@
 
 - **Hot Reload :** Changes made to the library during runtime are visible
 - **Platform Independent :** Works on all platforms Windows, Linux and MacOS
-- **Inbuilt Parser :** Reads symbols from Library and reloads them during runtime
-- **Automatic Build :** The initial build is automatic and performed when the premake script is run
+- **Inbuilt Parser :** Reads symbols from library and reloads them during runtime
+- **Automatic Build :** The initial build is automatic and performed when the Premake script is run
 
   ## Use Cases for our Interface
 
 - [An application using OpenGL Graphics]( https://github.com/Anirudh-V-Gubbi/DRIL/tree/main/examples/OpenGL)
-    - Visible changes are made and graphics are re-rendered during runtime with the help of our interface
+    - Visible changes are made and graphics are re-rendered during runtime with the help of our Interface
  
 - [A Json Parser Application](https://github.com/Anirudh-V-Gubbi/DRIL/tree/main/examples/FileParser)
-    - Files to be Parsed can be modified or replaced during runtime with the help of our interface
+    - Files to be parsed can be modified or replaced during runtime with the help of our Interface
   
 
 
