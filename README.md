@@ -1,9 +1,11 @@
 <div align="center">
   <h1 align="center">DRIL</h1>
 </div>
-<br/>
 
-  <h3 align="center">A Dynamic Reloadable Interface for Libraries</h3>
+
+  
+  <h2 align="center">A Dynamic Reloadable Interface for Libraries</h2>
+
 
 
 ## Features
@@ -15,7 +17,7 @@
 
   ## Use Cases for our Interface
 
-- [An application using OpenGL Graphics]( https://github.com/Anirudh-V-Gubbi/DRIL/tree/main/examples/OpenGL)
+- [An Application using OpenGL Graphics]( https://github.com/Anirudh-V-Gubbi/DRIL/tree/main/examples/OpenGL)
     - Visible changes are made and graphics are re-rendered during runtime with the help of our Interface
  
 - [A Json Parser Application](https://github.com/Anirudh-V-Gubbi/DRIL/tree/main/examples/FileParser)
