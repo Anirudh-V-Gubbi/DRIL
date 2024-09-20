@@ -4,7 +4,7 @@
 
 
   
-  <h2 align="center">A Dynamic Reloadable Interface for Libraries</h2>
+  <h2 align="center">A Dynamically Reloadable Interface for Libraries</h2>
 
 
 
